@@ -1,0 +1,6 @@
+#ifndef HEADER4CD5357032A347F2BD64A83A3B49C423
+#define HEADER4CD5357032A347F2BD64A83A3B49C423
+
+#define WIERTLO_INVOKE_WITH_STD_ADL(fun, ...) [&](){ using std :: fun; return fun(__VA_ARGS__); }()
+
+#endif
