@@ -1,5 +1,5 @@
 #pragma once
-#include <wiertlo/value_ptr.h>
+#include <wiertlo/value_ptr.hpp>
 #include <string>
 #include <iosfwd>
 

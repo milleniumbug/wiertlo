@@ -1,5 +1,5 @@
 #include <iostream>
-#include "value_ptr_example.h"
+#include "value_ptr_example.hpp"
 
 struct MyResourceImpl
 {

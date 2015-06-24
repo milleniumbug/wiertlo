@@ -1,7 +1,7 @@
 #include <iostream>
 #include <utility>
 #include <cmath>
-#include <wiertlo/defs.h>
+#include <wiertlo/defs.hpp>
 
 using namespace wiertlo::cpp_style_declarations;
 

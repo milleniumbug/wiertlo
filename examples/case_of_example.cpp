@@ -1,4 +1,4 @@
-#include <wiertlo/case_of.h>
+#include <wiertlo/case_of.hpp>
 #include <iostream>
 
 using wiertlo::switch_on;

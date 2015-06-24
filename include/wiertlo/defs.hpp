@@ -28,6 +28,30 @@ namespace wiertlo
 		template<typename T>
 		using c_array_infer_size = T[];
 	}
+
+	template<typename T>
+	T& extract_reference(T& v)
+	{
+		return v;
+	}
+
+	template<typename T>
+	const T& extract_reference(const T& v)
+	{
+		return v;
+	}
+
+	template<typename T>
+	T& extract_reference(std::reference_wrapper<T> v)
+	{
+		return v.get();
+	}
+
+	template<typename T>
+	const T& extract_reference(std::reference_wrapper<const T> v)
+	{
+		return v.get();
+	}
 }
 
 #endif

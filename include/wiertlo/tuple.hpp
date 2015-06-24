@@ -59,7 +59,7 @@ namespace wiertlo
 		template<typename Tuple, typename Function>
 		struct for_each_impl_one_arg<Tuple, Function, 0>
 		{
-			static auto do_it(Tuple& tuple, Function f)
+			static void do_it(Tuple& tuple, Function f)
 			{
 				
 			}
@@ -78,7 +78,7 @@ namespace wiertlo
 		template<typename Tuple, typename Function>
 		struct for_each_impl_two_arg<Tuple, Function, 0>
 		{
-			static auto do_it(Tuple& tuple, Function f)
+			static void do_it(Tuple& tuple, Function f)
 			{
 				
 			}

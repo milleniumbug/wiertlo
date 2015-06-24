@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include <wiertlo/arithmetic_if.h>
+#include <wiertlo/arithmetic_if.hpp>
 
 using wiertlo::arif;
 
