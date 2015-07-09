@@ -271,6 +271,18 @@ namespace wiertlo
 			typedef typename IterateN<detail::IncrementImpl, std::integral_constant<T, 0>, N>::type type;
 		};
 
+		template<typename TypeList>
+		struct Front
+		{
+			typedef typename TypeAt<0, TypeList>::type type;
+		};
+
+		template<typename TypeList>
+		struct Back
+		{
+			typedef typename TypeAt<Length<TypeList>::value-1, TypeList>::type type;
+		};
+
 		template<typename TypeList, typename What>
 		struct PushBack;
 

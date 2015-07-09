@@ -133,6 +133,18 @@ static_assert(
 			long>::type,
 		TypeList<int, int, long>>::value, "");
 
+// Front
+static_assert(
+	std::is_same<
+		typename Front<TypeList<int, int, long>>::type,
+		int>::value, "");
+
+// Back
+static_assert(
+	std::is_same<
+		typename Back<TypeList<int, int, long>>::type,
+		long>::value, "");
+
 // PushFront
 static_assert(
 	std::is_same<
