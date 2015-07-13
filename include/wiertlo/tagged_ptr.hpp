@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cassert>
 #include <utility>
+#include <functional>
 #include <type_traits>
 
 namespace wiertlo
@@ -155,72 +156,72 @@ namespace wiertlo
 	}
 
 	template<typename T>
-	bool operator==(std::nullptr_t nullp, tagged_ptr<T> rhs)
+	bool operator==(std::nullptr_t, tagged_ptr<T> rhs)
 	{
 		return !rhs;
 	}
 
 	template<typename T>
-	bool operator==(tagged_ptr<T> lhs, std::nullptr_t nullp)
+	bool operator==(tagged_ptr<T> lhs, std::nullptr_t)
 	{
 		return !lhs;
 	}
 
 	template<typename T>
-	bool operator!=(std::nullptr_t nullp, tagged_ptr<T> rhs)
+	bool operator!=(std::nullptr_t, tagged_ptr<T> rhs)
 	{
 		return static_cast<bool>(rhs);
 	}
 
 	template<typename T>
-	bool operator!=(tagged_ptr<T> lhs, std::nullptr_t nullp)
+	bool operator!=(tagged_ptr<T> lhs, std::nullptr_t)
 	{
 		return static_cast<bool>(lhs);
 	}
 
 	template<typename T>
-	bool operator<(tagged_ptr<T> lhs, std::nullptr_t nullp)
+	bool operator<(tagged_ptr<T> lhs, std::nullptr_t)
 	{
 		return std::less<typename tagged_ptr<T>::pointer>()(lhs.get(), nullptr);
 	}
 
 	template<typename T>
-	bool operator<(std::nullptr_t nullp, tagged_ptr<T> rhs)
+	bool operator<(std::nullptr_t, tagged_ptr<T> rhs)
 	{
 		return std::less<typename tagged_ptr<T>::pointer>()(nullptr, rhs.get());
 	}
 
 	template<typename T>
-	bool operator>(tagged_ptr<T> lhs, std::nullptr_t nullp)
+	bool operator>(tagged_ptr<T> lhs, std::nullptr_t)
 	{
 		return !(nullptr < lhs);
 	}
 
 	template<typename T>
-	bool operator>(std::nullptr_t nullp, tagged_ptr<T> rhs)
+	bool operator>(std::nullptr_t, tagged_ptr<T> rhs)
 	{
 		return !(rhs < nullptr);
 	}
 	template<typename T>
-	bool operator<=(tagged_ptr<T> lhs, std::nullptr_t nullp)
+	bool operator<=(tagged_ptr<T> lhs, std::nullptr_t)
 	{
 		return nullptr < lhs;
 	}
 
 	template<typename T>
-	bool operator<=(std::nullptr_t nullp, tagged_ptr<T> rhs)
+	bool operator<=(std::nullptr_t, tagged_ptr<T> rhs)
 	{
 		return rhs < nullptr;
 	}
 
 	template<typename T>
-	bool operator>=(tagged_ptr<T> lhs, std::nullptr_t nullp)
+	bool operator>=(tagged_ptr<T> lhs, std::nullptr_t)
 	{
 		return !(lhs < nullptr);
 	}
 
 	template<typename T>
-	bool operator>=(std::nullptr_t nullp, tagged_ptr<T> rhs)
+	bool operator>=(std::nullptr_t, tagged_ptr<T> rhs)
 	{
 		return !(nullptr < rhs);
 	}
