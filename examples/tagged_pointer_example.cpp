@@ -5,7 +5,7 @@
 #include <wiertlo/tagged_pointer.hpp>
 
 template<typename T>
-void print_ptr(tagged_pointer<T> p, std::string name)
+void print_ptr(wiertlo::tagged_pointer<T> p, std::string name)
 {
 	std::cout << p.get() << " " << (p ? std::to_string(*p) : "N/A") << " " << p.tag() << " - " << name << "\n";
 }
@@ -16,7 +16,7 @@ void basic_usage()
 {
 	int a_value = 42;
 	int* a_pointer = &a_value;
-	tagged_pointer<int> p(&a_value);
+	wiertlo::tagged_pointer<int> p(&a_value);
 	assert(p);
 	assert(p.get() == a_pointer);
 	assert(p.tag() == 0);
@@ -45,10 +45,10 @@ void basic_usage()
 	std::cout << std::boolalpha << (p == q) << "\n";
 
 	// testing platform-specific assumptions
-	static const int maximum = tagged_pointer<int>::max_tag_value;
+	static const int maximum = wiertlo::tagged_pointer<int>::max_tag_value;
 	static_assert(maximum >= 3, "");
 
-	tagged_pointer<int> np = nullptr;
+	wiertlo::tagged_pointer<int> np = nullptr;
 	np.set_tag(3);
 	assert(!np);
 	assert(np.tag() == 3);
@@ -58,9 +58,9 @@ void basic_usage()
 void testing_comparisons()
 {
 	int a_value = 42;
-	tagged_pointer<int> p(&a_value);
-	tagged_pointer<int> np_def;
-	tagged_pointer<int> np_exp(nullptr);
+	wiertlo::tagged_pointer<int> p(&a_value);
+	wiertlo::tagged_pointer<int> np_def;
+	wiertlo::tagged_pointer<int> np_exp(nullptr);
 
 	assert(
 		!np_def &&
@@ -83,7 +83,7 @@ void using_with_std_unique_ptr()
 {
 	struct tag_deleter
 	{
-		typedef tagged_pointer<int> pointer;
+		typedef wiertlo::tagged_pointer<int> pointer;
 
 		void operator()(pointer p) const
 		{
@@ -103,7 +103,7 @@ void using_with_std_unique_ptr()
 	// p.get() returns a copy, so don't do this: 
 	// p.get().set_tag(x)
 	// instead do it the longer way (wrap in a function for your own sanity)
-	p.reset(tagged_pointer<std::remove_reference<decltype(p)>::type::element_type>(p.release(), x));
+	p.reset(wiertlo::tagged_pointer<std::remove_reference<decltype(p)>::type::element_type>(p.release(), x));
 
 	assert(*p == 42);
 	assert(p.get().tag() == 3);
