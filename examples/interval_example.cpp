@@ -23,6 +23,17 @@ int main()
 	if(is_between(value, make_inclusive_interval(0, 50)))
 		allow();
 
+	// It ~~scales~~:
+	int a = 2, b = 4, c = 0, d = 17, e = -1;
+	const int min = 0;
+	const int max = 16;
+	if(a >= min && a <= max && b >= min && b <= max && c >= min && c <= max && d >= min && d <= max && e >= min && e <= max)
+		allow();
+
+	const auto range = make_inclusive_interval(0, 16);
+	if(is_between(a, range) && is_between(b, range) && is_between(c, range) && is_between(d, range) && is_between(e, range))
+		allow();
+
 	// It ~~composes~~:
 	std::vector<wiertlo::UpperExclusiveInterval<double, double>> ranges = { make_interval(-1.0, 1.0), make_interval(0.0, 42.0), make_interval(-3.0, 3.0), make_interval(0.0, 5.0) };
 	std::vector<int> values = { 4, 12, 0, 5 };
