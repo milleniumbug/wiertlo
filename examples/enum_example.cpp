@@ -1,6 +1,8 @@
 #include <iostream>
 #include <typeindex>
+// if your compiler supports it, you can make from_string and to_string accept/return std::experimental::string_view instead of std::string
 #define WIERTLO_ENUM_USE_EXPERIMENTAL_STRING_VIEW
+// you need to include this header before - don't worry if you forget this, you'll be reminded this at compile-time
 #include <wiertlo/enum_enable.hpp>
 
 // Options:
