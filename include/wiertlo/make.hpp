@@ -1,3 +1,6 @@
+#ifndef HEADERbcff4ce395e0d2912672be5dd8bf2dc0
+#define HEADERbcff4ce395e0d2912672be5dd8bf2dc0
+
 #include <utility>
 #include <memory>
 #include <array>
@@ -59,3 +62,5 @@ namespace wiertlo
 	}
 	
 }
+
+#endif
