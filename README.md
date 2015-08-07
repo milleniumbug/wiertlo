@@ -11,12 +11,22 @@ Header description
 - `<wiertlo/deleter_from_function.hpp>` - simplify wrapping legacy C API with `std::unique_ptr`.
 - `<wiertlo/enum.hpp>` - improved enums. You need to include `<wiertlo/enum_enable.hpp>` beforehand
 - `<wiertlo/interval.hpp>` - verify if a variable is in a given interval. Support for half-open and closed intervals.
+- `<wiertlo/make.hpp>` - common factory functions
 - `<wiertlo/meta.hpp>` - metaprogramming library: type lists and type traits.
 - `<wiertlo/one_based_array.hpp>` - array decorator to make them one-based.
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
 - `<wiertlo/tagged_ptr.hpp>` - dirty low-level pointer tagging.
 - `<wiertlo/tuple.hpp>` - tuple algorithms (C++14 recommended for polymorphic lambdas).
 - `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics. 
+
+Design rationale
+----------------
+
+- Make abstractions so simple they can be introduced in minutes.
+- Don't aim for half-smart behaviour if you can't be smart - be dumb instead.
+- No header interdependencies inside the library - every header must be independent so users can cut out single headers, even at the cost of small DRY violations.
+- Always aim for DRY otherwise.
+- While small corrections to require C++11 instead of C++14 are acceptable, heroic sacrifices and working out compiler bugs are not.
 
 Name...?
 --------
