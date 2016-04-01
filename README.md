@@ -16,6 +16,7 @@ Header description
 - `<wiertlo/meta.hpp>` - metaprogramming library: type lists and type traits.
 - `<wiertlo/one_based_array.hpp>` - array decorator to make them one-based.
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
+- `<wiertlo/pimpl_handle.hpp>` - generic class for PIMPL idiom
 - `<wiertlo/tagged_ptr.hpp>` - dirty low-level pointer tagging.
 - `<wiertlo/tuple.hpp>` - tuple algorithms (C++14 recommended for polymorphic lambdas).
 - `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics. 
