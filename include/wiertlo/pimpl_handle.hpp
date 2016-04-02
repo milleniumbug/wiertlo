@@ -18,7 +18,7 @@ namespace wiertlo
 		
 		pimpl_handle() {}
 		
-	public:	
+	public:
 		template<typename PimplHandle, typename ImplType, typename HandleType>
 		friend class pimpl_implementation_mixin;
 		
@@ -102,6 +102,8 @@ namespace wiertlo
 			return *reinterpret_cast<HandleType*>(pimpl.buffer);
 		}
 		
+		static impl_type& get(pimpl_handle_type& handle) { return *get_handle(handle); }
+
 		template<typename... Args>
 		static pimpl_handle_type create_pimpl_handle(Args&&... args)
 		{
