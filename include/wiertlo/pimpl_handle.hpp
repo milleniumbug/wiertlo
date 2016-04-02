@@ -35,11 +35,13 @@ namespace wiertlo
 		pimpl_handle& operator=(const pimpl_handle& other)
 		{
 			PimplImplementation::copy_assignment_operator(*this, other);
+			return *this;
 		}
 		
 		pimpl_handle& operator=(pimpl_handle&& other) noexcept
 		{
 			PimplImplementation::move_assignment_operator(*this, std::move(other));
+			return *this;
 		}
 		
 		~pimpl_handle()
