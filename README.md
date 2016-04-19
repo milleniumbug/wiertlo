@@ -20,6 +20,7 @@ Header description
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
 - `<wiertlo/pimpl_handle.hpp>` - generic class for PIMPL idiom
 - `<wiertlo/shared_member.hpp>` - share ownership of a subobject with the enclosing object.
+- `<wiertlo/string.hpp>` - string utilities.
 - `<wiertlo/tagged_ptr.hpp>` - dirty low-level pointer tagging.
 - `<wiertlo/tuple.hpp>` - tuple algorithms (C++14 recommended for polymorphic lambdas).
 - `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics. 
