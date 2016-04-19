@@ -35,7 +35,7 @@ int main()
 	{
 		std::cout << "Not found\n";
 	}
-
+	
 	// std::experimental::optional
 	// doesn't support references
 	if(auto kv = atexp(m, 4))
@@ -48,4 +48,9 @@ int main()
 	{
 		std::cout << "Not found\n";
 	}
+
+	std::for_each(m.begin(), m.end(), wiertlo::pair_param_fn([&](int key, int value)
+	{
+		std::cout << key << " " << value << "\n";
+	}));
 }

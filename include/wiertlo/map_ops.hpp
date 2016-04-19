@@ -50,4 +50,37 @@ namespace wiertlo
 
 	template<typename KeyValuePair>
 	void value(const KeyValuePair&& kvp) = delete;
+
+	// pair_param_adapter
+	// idea taken from http://stackoverflow.com/a/36552463/1012936
+	// adapted to C++11, and renamed
+
+	namespace detail
+	{
+		template<typename UnaryFunction>
+		class pair_param_adapter
+		{
+		private:
+			UnaryFunction f;
+		public:
+			template<typename Arg>
+			auto operator()(Arg&& arg) -> decltype(f(arg.first, arg.second))
+			{
+				return f(arg.first, arg.second);
+			}
+
+			template<typename Arg>
+			pair_param_adapter(Arg&& arg) :
+				f(std::forward<Arg>(arg))
+			{
+
+			}
+		};
+	}
+
+	template<typename T>
+	detail::pair_param_adapter<T> pair_param_fn(const T& fun)
+	{
+		return detail::pair_param_adapter<T>(fun);
+	}
 }
