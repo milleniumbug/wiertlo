@@ -11,6 +11,7 @@ Header description
 - `<wiertlo/deleter_from_function.hpp>` - simplify wrapping legacy C API with `std::unique_ptr`.
 - `<wiertlo/enum.hpp>` - improved enums. You need to include `<wiertlo/enum_enable.hpp>` beforehand
 - `<wiertlo/interval.hpp>` - verify if a variable is in a given interval. Support for half-open and closed intervals.
+- `<wiertlo/lambda_visitor.hpp>` - factory function for creating a `StaticVisitor` suitable for usage in `boost::apply_visitor` from lambdas provided in the argument list.
 - `<wiertlo/map_ops.hpp>` - generate the simplified access function for maps for any `optional` type, also `key(kvp)` and `value(kvp)` helpers.
 - `<wiertlo/make.hpp>` - common factory functions
 - `<wiertlo/meta.hpp>` - metaprogramming library: type lists and type traits.
