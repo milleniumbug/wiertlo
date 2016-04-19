@@ -14,6 +14,7 @@ Header description
 - `<wiertlo/map_ops.hpp>` - generate the simplified access function for maps for any `optional` type, also `key(kvp)` and `value(kvp)` helpers.
 - `<wiertlo/make.hpp>` - common factory functions
 - `<wiertlo/meta.hpp>` - metaprogramming library: type lists and type traits.
+- `<wiertlo/noisy.hpp>` - log all calls to Big Five.
 - `<wiertlo/one_based_array.hpp>` - array decorator to make them one-based.
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
 - `<wiertlo/pimpl_handle.hpp>` - generic class for PIMPL idiom
