@@ -9,7 +9,7 @@ namespace wiertlo
 	//
 	// Returns a shared_ptr that shares ownership with a passed pointer, but
 	// points to a member object of the pointed object. If the passed shared_ptr is
-	// empty, returns nullptr. If the passed pointer to member object is null,
+	// null, returns nullptr. If the passed pointer to member object is null,
 	// the behaviour is undefined.
 	template<typename T, typename Member>
 	std::shared_ptr<Member> shared_member(std::shared_ptr<T> ptr, Member T::*member)
