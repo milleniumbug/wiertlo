@@ -1,7 +1,7 @@
 #ifndef PIMPL_EXAMPLE_HPP
 #define PIMPL_EXAMPLE_HPP
 
-#include "pimpl_handle.hpp"
+#include <wiertlo/pimpl_handle.hpp>
 
 class hidden
 {
