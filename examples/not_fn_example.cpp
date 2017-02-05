@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <vector>
 #include <wiertlo/not_fn.hpp>
 #include <cassert>
 

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iterator>
 #include <cassert>
+#include <vector>
 #include <wiertlo/make.hpp>
 #include <wiertlo/overload_set.hpp>
 

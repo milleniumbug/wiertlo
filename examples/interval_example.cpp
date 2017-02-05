@@ -2,6 +2,7 @@
 #include <functional>
 #include <algorithm>
 #include <iterator>
+#include <vector>
 #include <wiertlo/interval.hpp>
 #include <wiertlo/overload_set.hpp>
 
