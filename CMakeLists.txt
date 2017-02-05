@@ -13,6 +13,7 @@ foreach(example ${EXAMPLE_FILES})
 		examples)
 endforeach()
 
+set_property(TARGET comp_from_key_example PROPERTY CXX_STANDARD 14)
 set_property(TARGET map_ops PROPERTY CXX_STANDARD 14)
 set_property(TARGET one_based_array_example PROPERTY CXX_STANDARD 14)
 set_property(TARGET overload_set_example PROPERTY CXX_STANDARD 14)
