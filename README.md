@@ -28,7 +28,8 @@ Header description
 - `<wiertlo/tagged_ptr.hpp>` - dirty low-level pointer tagging.
 - `<wiertlo/unique_handle.hpp>` - generalization of `std::unique_ptr` to arbitrary handles (like file descriptors)
 - `<wiertlo/tuple.hpp>` - tuple algorithms (C++14 recommended for polymorphic lambdas).
-- `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics. 
+- `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics.
+- `<wiertlo/void.hpp>` - workarounds for `void` being a special snowflake.
 
 Design rationale
 ----------------
