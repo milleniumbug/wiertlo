@@ -5,6 +5,7 @@ Header description
 ------------------
 
 - `<wiertlo/arithmetic_if.hpp>` - FORTRAN-style three-way arithmetic if.
+- `<wiertlo/baretype.hpp>` - `decltype`-like macro for the common use case of accessing the unqualified type.
 - `<wiertlo/case_of.hpp>` - `switch`-style flow control without fall-through.
 - `<wiertlo/comp_from_key.hpp>` - Make a compare function from a key function.
 - `<wiertlo/construct.hpp>` - less error-prone in-place construction.
