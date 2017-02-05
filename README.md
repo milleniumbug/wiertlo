@@ -21,6 +21,7 @@ Header description
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
 - `<wiertlo/pimpl_handle.hpp>` - generic class for PIMPL idiom
 - `<wiertlo/shared_member.hpp>` - share ownership of a subobject with the enclosing object.
+- `<wiertlo/shitty_range.hpp>` - World's Simplest Range Library™.
 - `<wiertlo/string.hpp>` - string utilities.
 - `<wiertlo/strong_typedef.hpp>` - create distinct types.
 - `<wiertlo/tagged_ptr.hpp>` - dirty low-level pointer tagging.
