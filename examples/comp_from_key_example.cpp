@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include <wiertlo/comp_from_key.hpp>
+#include <string>
 
 struct Person
 {

@@ -3,6 +3,7 @@
 #include <deque>
 #include <memory>
 #include <utility>
+#include <string>
 #include <wiertlo/one_based_array.hpp>
 
 int main()

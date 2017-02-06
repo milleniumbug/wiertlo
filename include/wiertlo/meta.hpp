@@ -326,6 +326,30 @@ namespace wiertlo
 		public:
 			typedef third_ type;
 		};
+
+		template<typename From, typename To>
+		struct CopyCv
+		{
+			typedef To type;
+		};
+
+		template<typename From, typename To>
+		struct CopyCv<const From, To>
+		{
+			typedef const To type;
+		};
+
+		template<typename From, typename To>
+		struct CopyCv<volatile From, To>
+		{
+			typedef volatile To type;
+		};
+
+		template<typename From, typename To>
+		struct CopyCv<const volatile From, To>
+		{
+			typedef const volatile To type;
+		};
 	}
 }
 
