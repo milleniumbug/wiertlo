@@ -18,4 +18,11 @@ int main()
 		wiertlo::replaced_all(s, wiertlo::find_all(s, std::string("the")), std::string("a"), std::back_inserter(r));
 		assert(r == "a lazy fox jumped over a broken car");
 	}
+	{
+		std::string r = s;
+		auto all = wiertlo::find_all(r, std::string("the"));
+		auto first = *all.begin();
+		wiertlo::replace(r, first, std::string("overly"));
+		assert(r == "overly lazy fox jumped over the broken car");
+	}
 }

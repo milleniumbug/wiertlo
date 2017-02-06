@@ -102,6 +102,15 @@ namespace wiertlo
 			}
 		}
 	}
+
+	template<typename RandomAccessContainer, typename Substring, typename What>
+	void replace(RandomAccessContainer& cont, Substring substring, What&& what)
+	{
+		auto what_size = std::distance(what.begin(), what.end());
+		cont.insert(substring.end(), what.begin(), what.end());
+		cont.erase(substring.begin(), substring.end());
+	}
+
 }
 
 #endif
