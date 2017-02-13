@@ -20,6 +20,22 @@ namespace wiertlo
 
 		template<typename F>
 		struct default_case_impl
+namespace wiertlo
+{
+	namespace detail
+	{
+		template<typename V, typename P, typename F>
+		struct case_of_impl
+		{
+			V value;
+			P binary_predicate;
+			F function;
+
+			typedef std::false_type is_default_case;
+		};
+
+		template<typename F>
+		struct default_case_impl
 		{
 			F function;
 
@@ -45,6 +61,13 @@ namespace wiertlo
 		{
 			return switch_on(std::forward<V1>(value), std::forward<Args>(args)...);
 		}
+	}
+	
+	template <typename V, typename F, typename... Args>
+	bool switch_on(V&&, const detail::default_case_impl<F>& c, Args&&... args) {
+	    static_assert(sizeof...(args) == 0, "Arguments provided to switch_on after the default branch.");
+	    c.function();
+	    return true;
 	}
 
 	template<template <typename> class P, typename F, typename V>
