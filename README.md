@@ -1,6 +1,5 @@
-# wiertlo
+# wiertlo [![Join the chat at https://gitter.im/wiertlo/Lobby](https://badges.gitter.im/wiertlo/Lobby.svg)](https://gitter.im/wiertlo/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
 
-[![Join the chat at https://gitter.im/wiertlo/Lobby](https://badges.gitter.im/wiertlo/Lobby.svg)](https://gitter.im/wiertlo/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 C++11 and C++14 utility pack
 
 Header description
