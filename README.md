@@ -32,7 +32,7 @@ Header description
 - `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics.
 - `<wiertlo/void.hpp>` - workarounds for `void` being a special snowflake.
 
-**NOTICE:** the headers not listed in the above list are considered non-public and/or beta. They may even not compile. They may be also subject to changes. You have been warned.
+**NOTICE:** the headers not listed in the above list are considered non-public and/or beta. They may even not compile. They may be also subject to changes. They may be removed at any time. You have been warned.
 
 Design rationale
 ----------------
