@@ -20,22 +20,6 @@ namespace wiertlo
 
 		template<typename F>
 		struct default_case_impl
-namespace wiertlo
-{
-	namespace detail
-	{
-		template<typename V, typename P, typename F>
-		struct case_of_impl
-		{
-			V value;
-			P binary_predicate;
-			F function;
-
-			typedef std::false_type is_default_case;
-		};
-
-		template<typename F>
-		struct default_case_impl
 		{
 			F function;
 
