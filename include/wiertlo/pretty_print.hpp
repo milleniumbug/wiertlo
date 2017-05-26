@@ -726,3 +726,44 @@ namespace wiertlo
 		};
 	}
 }
+
+// std::atomic
+#include <atomic>
+namespace wiertlo
+{
+	namespace pretty
+	{
+		namespace detail
+		{
+			template<typename Tuple>
+			struct enable_if_atomic
+			{
+
+			};
+
+			template<typename T>
+			struct enable_if_atomic<std::atomic<T>>
+			{
+				typedef T type;
+			};
+		}
+
+		template<typename NameFromTypePolicy, typename Atomic>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			Atomic,
+			detail::void_t<typename detail::enable_if_atomic<Atomic>::type>
+		> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, const Atomic& value)
+			{
+				typedef typename detail::enable_if_atomic<Atomic>::type T;
+				os << "std::atomic<";
+				os << NameFromTypePolicy::template get_name<T>();
+				os << ">(";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, value.load());
+				os << ")";
+			}
+		};
+	}
+}

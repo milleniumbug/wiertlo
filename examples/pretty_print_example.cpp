@@ -85,5 +85,5 @@ int main()
 	test(std::make_tuple(), "std::make_tuple()");
 	test(std::make_tuple(42,std::string("lol")), "std::make_tuple(42,std::string(\"lol\"))");
 	test(std::bitset<6>("010011"), "std::bitset<6>(\"010011\")");
-
+	test(std::atomic<int>(5), "std::atomic<int>(5)");
 }
