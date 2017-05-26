@@ -13,6 +13,7 @@ foreach(example ${EXAMPLE_FILES})
 		examples)
 endforeach()
 
+set_property(TARGET pretty_print_example PROPERTY CXX_STANDARD 14)
 set_property(TARGET baretype_example PROPERTY CXX_STANDARD 14)
 set_property(TARGET string_interface_example PROPERTY CXX_STANDARD 14)
 set_property(TARGET comp_from_key_example PROPERTY CXX_STANDARD 14)
