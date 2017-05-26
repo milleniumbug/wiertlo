@@ -527,6 +527,24 @@ namespace wiertlo
 {
 	namespace pretty
 	{
+		namespace detail
+		{
+			template<typename NameFromTypePolicy, typename Iterable>
+			void printIterable(std::ostream& os, const Iterable& value)
+			{
+				bool first = true;
+				for(auto&& x : value)
+				{
+					if(!first)
+					{
+						os << ",";
+					}
+					wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, x);
+					first = false;
+				}
+			}
+		}
+
 		template<typename NameFromTypePolicy>
 		struct cpp_expression_format<NameFromTypePolicy, std::string, void> : cpp_expression_format<NameFromTypePolicy>
 		{
@@ -546,17 +564,48 @@ namespace wiertlo
 			static void print(std::ostream& os, const Container& value)
 			{
 				os << NameFromTypePolicy::template get_name<Container>() << "({";
-				bool first = true;
-				for(auto&& x : value)
-				{
-					if(!first)
-					{
-						os << ",";
-					}
-					wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, x);
-					first = false;
-				}
+				detail::printIterable<NameFromTypePolicy>(os, value);
 				os << "})";
+			}
+		};
+	}
+}
+
+// std::array
+#include <array>
+namespace wiertlo
+{
+	namespace pretty
+	{
+		namespace detail
+		{
+			template<typename T>
+			struct is_array
+			{
+				static const bool value = false;
+			};
+
+			template<typename T, std::size_t Size>
+			struct is_array<std::array<T, Size>>
+			{
+				static const bool value = true;
+			};
+		}
+
+		template<typename NameFromTypePolicy, typename Array>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			Array,
+			detail::void_t<typename std::enable_if<detail::is_array<Array>::value>::type>
+		> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, const Array& value)
+			{
+				os << "std::array<";
+				os << NameFromTypePolicy::template get_name<typename Array::value_type>();
+				os << "," << value.size() << ">{";
+				detail::printIterable<NameFromTypePolicy>(os, value);
+				os << "}";
 			}
 		};
 	}

@@ -80,6 +80,7 @@ int main()
 			"std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >({std::vector<bool, std::allocator<bool> >({false,false,true}),std::vector<bool, std::allocator<bool> >({true})})"
 		});
 	}
+	test(std::array<int, 4>{1,2,3,4}, "std::array<int,4>{1,2,3,4}");
 	test(std::make_pair(42, std::string("lol")), "std::make_pair(42,std::string(\"lol\"))");
 	test(std::make_tuple(), "std::make_tuple()");
 	test(std::make_tuple(42,std::string("lol")), "std::make_tuple(42,std::string(\"lol\"))");
