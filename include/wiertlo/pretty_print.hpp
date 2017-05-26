@@ -690,3 +690,39 @@ namespace wiertlo
 		};
 	}
 }
+
+// bitset
+#include <bitset>
+namespace wiertlo
+{
+	namespace pretty
+	{
+		namespace detail
+		{
+			template<typename Tuple>
+			struct is_bitset
+			{
+				static const bool value = false;
+			};
+
+			template<std::size_t Size>
+			struct is_bitset<std::bitset<Size>>
+			{
+				static const bool value = true;
+			};
+		}
+
+		template<typename NameFromTypePolicy, typename Bitset>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			Bitset,
+			typename std::enable_if<detail::is_bitset<Bitset>::value>::type
+		> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, const Bitset& value)
+			{
+				os << "std::bitset<" << value.size() << ">(\"" << value.to_string() << "\")";
+			}
+		};
+	}
+}
