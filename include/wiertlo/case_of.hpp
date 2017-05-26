@@ -46,6 +46,13 @@ namespace wiertlo
 			return switch_on(std::forward<V1>(value), std::forward<Args>(args)...);
 		}
 	}
+	
+	template <typename V, typename F, typename... Args>
+	bool switch_on(V&&, const detail::default_case_impl<F>& c, Args&&... args) {
+	    static_assert(sizeof...(args) == 0, "Arguments provided to switch_on after the default branch.");
+	    c.function();
+	    return true;
+	}
 
 	template<template <typename> class P, typename F, typename V>
 	detail::case_of_impl<V, P<V>, F> case_of(V&& v, F&& f)
