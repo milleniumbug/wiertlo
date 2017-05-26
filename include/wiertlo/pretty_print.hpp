@@ -452,12 +452,12 @@ namespace wiertlo
 			}
 		};
 
-		template<typename NameFromTypePolicy, typename Numeric>
-		struct cpp_expression_format<NameFromTypePolicy, Numeric, detail::void_t<typename detail::safe_limits<Numeric>::type>> : cpp_expression_format<NameFromTypePolicy>
+		template<typename NameFromTypePolicy, typename Integral>
+		struct cpp_expression_format<NameFromTypePolicy, Integral, detail::void_t<typename detail::safe_limits<Integral>::type>> : cpp_expression_format<NameFromTypePolicy>
 		{
-			static void print(std::ostream& os, Numeric value)
+			static void print(std::ostream& os, Integral value)
 			{
-				typedef detail::safe_limits<Numeric> limits;
+				typedef detail::safe_limits<Integral> limits;
 				std::ostream withManipulatorsRemoved(os.rdbuf());
 				if(limits::min() <= value && value <= limits::max())
 				{
@@ -471,6 +471,20 @@ namespace wiertlo
 				{
 					withManipulatorsRemoved << "static_cast<" << limits::type_name() << ">(" << value << ")";
 				}
+			}
+		};
+
+		template<typename NameFromTypePolicy, typename FloatingPoint>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			FloatingPoint,
+			detail::void_t<typename std::enable_if<std::is_floating_point<FloatingPoint>::value>::type>> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, FloatingPoint value)
+			{
+				typedef detail::safe_limits<FloatingPoint> limits;
+				std::ostream withManipulatorsRemoved(os.rdbuf());
+				
 			}
 		};
 
@@ -543,6 +557,86 @@ namespace wiertlo
 					first = false;
 				}
 				os << "})";
+			}
+		};
+	}
+}
+
+// pair
+#include <tuple>
+namespace wiertlo
+{
+	namespace pretty
+	{
+		template<typename NameFromTypePolicy, typename First, typename Second>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			std::pair<First, Second>,
+			void
+		> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, const std::pair<First, Second>& value)
+			{
+				os << "std::make_pair(";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, value.first);
+				os << ",";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, value.second);
+				os << ")";
+			}
+		};
+	}
+}
+
+// tuple
+#include <tuple>
+namespace wiertlo
+{
+	namespace pretty
+	{
+		namespace detail
+		{
+			template<typename Tuple>
+			struct is_tuple
+			{
+				static const bool value = false;
+			};
+
+			template<typename... Types>
+			struct is_tuple<std::tuple<Types...>>
+			{
+				static const bool value = true;
+			};
+
+			template<typename NameFromTypePolicy, typename Tuple>
+			void printAllTuple(std::ostream& os, const Tuple&, std::index_sequence<>)
+			{
+				os << "std::make_tuple()";
+			}
+
+			template<typename NameFromTypePolicy, typename Tuple, std::size_t First, std::size_t... Indices>
+			void printAllTuple(std::ostream& os, const Tuple& tuple, std::index_sequence<First, Indices...>)
+			{
+				using swallow = int[];
+				os << "std::make_tuple(";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, std::get<0>(tuple));
+				swallow{ (os << ",", wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, std::get<Indices>(tuple)), 0)... };
+				os << ")";
+			}
+		}
+
+		template<typename NameFromTypePolicy, typename Tuple>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			Tuple,
+			typename std::enable_if<detail::is_tuple<Tuple>::value>::type
+		> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, const Tuple& value)
+			{
+				detail::printAllTuple<NameFromTypePolicy>(
+					os,
+					value,
+					std::make_index_sequence<std::tuple_size<Tuple>::value>());
 			}
 		};
 	}

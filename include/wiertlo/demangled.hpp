@@ -69,5 +69,5 @@ namespace wiertlo
 			detail::replaceAll(s, "union ", "");
 			return s;
 		}
-};
+	};
 }
