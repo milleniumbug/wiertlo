@@ -8,7 +8,7 @@ Header description
 - `<wiertlo/arithmetic_if.hpp>` - FORTRAN-style three-way arithmetic if.
 - `<wiertlo/baretype.hpp>` - `decltype`-like macro for the common use case of accessing the unqualified type.
 - `<wiertlo/case_of.hpp>` - `switch`-style flow control without fall-through.
-- `<wiertlo/comp_from_key.hpp>` - Make a compare function from a key function.
+- `<wiertlo/comp_from_key.hpp>` - (C++14) Make a compare function from a key function.
 - `<wiertlo/construct.hpp>` - less error-prone in-place construction.
 - `<wiertlo/defs.hpp>` - C++ template typedefs for built-in types.
 - `<wiertlo/demangled.hpp>` - Demangle names relatively portably.
@@ -20,6 +20,7 @@ Header description
 - `<wiertlo/map_ops.hpp>` - generate the simplified access function for maps for any `optional` type, also `key(kvp)` and `value(kvp)` helpers.
 - `<wiertlo/meta.hpp>` - metaprogramming library: type lists and type traits.
 - `<wiertlo/noisy.hpp>` - log all calls to Big Five.
+- `<wiertlo/numeric.hpp>` - numeric utilities: warning-less comparisons for arbitrary integral types, generalized modulo number wrapping.
 - `<wiertlo/one_based_array.hpp>` - array decorator to make them one-based.
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
 - `<wiertlo/pretty_print.hpp>` - (C++14) pretty print C++ objects in multiple formats: currently only "C++ expression" format is supported
