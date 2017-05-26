@@ -121,6 +121,13 @@ namespace wiertlo
 	{
 		return detail::integral_compare(lhs, rhs);
 	}
+
+	template<typename Integral>
+	constexpr Integral wrap(Integral x, Integral wrapValue)
+	{
+		// thanks https://stackoverflow.com/a/44184152/1012936
+		return ((x % wrapValue) + wrapValue) % wrapValue;
+	}
 }
 
 #endif
