@@ -523,7 +523,7 @@ namespace wiertlo
 			{
 				os << NameFromTypePolicy::template get_name<Container>() << "({";
 				bool first = true;
-				for(auto& x : value)
+				for(auto&& x : value)
 				{
 					if(!first)
 					{

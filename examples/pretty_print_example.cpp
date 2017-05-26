@@ -1,68 +1,10 @@
 #include <wiertlo/pretty_print.hpp>
+#include <wiertlo/demangled.hpp>
 #include <cassert>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iostream>
-
-void replaceAll(std::string& source, const std::string& from, const std::string& to)
-{
-	std::string newString;
-	newString.reserve(source.length());  // avoids a few memory allocations
-
-	std::string::size_type lastPos = 0;
-	std::string::size_type findPos;
-
-	while(std::string::npos != (findPos = source.find(from, lastPos)))
-	{
-		newString.append(source, lastPos, findPos - lastPos);
-		newString += to;
-		lastPos = findPos + from.length();
-	}
-
-	// Care for the rest after last occurrence
-	newString += source.substr(lastPos);
-
-	source.swap(newString);
-}
-
-struct free_deleter
-{
-	template<typename T>
-	void operator()(T* ptr)
-	{
-		free(ptr);
-	}
-};
-
-#ifndef _MSC_VER
-#include <cxxabi.h>
-#endif
-
-struct RTTINamePolicy
-{
-	template<typename T>
-	static std::string get_name()
-	{
-		
-#ifndef _MSC_VER
-		int status;
-		std::size_t length;
-		std::unique_ptr<char, free_deleter> demangled(abi::__cxa_demangle(typeid(T).name(), nullptr, &length, &status));
-		if(status != 0)
-			throw "FUCK";
-		std::string s = demangled.get();
-#else
-		std::string s = typeid(T).name();
-#endif
-		// TODO: don't break on identifiers like `lolenum`
-		replaceAll(s, "enum ", "");
-		replaceAll(s, "struct ", "");
-		replaceAll(s, "class ", "");
-		replaceAll(s, "union ", "");
-		return s;
-	}
-};
 
 enum class Asdf
 {
@@ -74,9 +16,25 @@ void testRaw(const T& actual, const U& expected)
 {
 	if(actual != expected)
 	{
-		std::cout << "TEST FAILURE: ";
-		std::cout << "actual: " << actual << "\n";
+		std::cout << "TEST FAILURE:\n";
+		std::cout << "actual  : " << actual << "\n";
 		std::cout << "expected: " << expected << "\n";
+		std::cout << "\n\n";
+		assert(false);
+	}
+}
+
+template<typename T, typename U>
+void testRawAny(const T& actual, const U& expecteds)
+{
+	auto it = std::find_if(expecteds.begin(), expecteds.end(), [&](auto& expected){
+		return actual == expected;
+	});
+	if(it == expecteds.end())
+	{
+		std::cout << "TEST FAILURE:\n";
+		std::cout << "actual  : " << actual << "\n";
+		std::cout << "MATCHED NONE OF THE EXPECTEDS\n";
 		std::cout << "\n\n";
 		assert(false);
 	}
@@ -85,7 +43,7 @@ void testRaw(const T& actual, const U& expected)
 template<typename T>
 void test(const T& value, const std::string& expected)
 {
-	auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<RTTINamePolicy>>(value);
+	auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<wiertlo::RTTINamePolicy>>(value);
 	testRaw(actual, expected);
 }
 
@@ -109,9 +67,17 @@ int main()
 	test(std::make_unique<int>(42), "std::make_unique<int>(42)");
 	test(Asdf::A, "Asdf(0)");
 	{
-		auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<RTTINamePolicy>>(std::vector<int>({ 1, 2, 3, 4 }));
-		// both are acceptable
-		replaceAll(actual, "int, std::allocator<int>", "int,std::allocator<int>");
-		testRaw(actual, "std::vector<int,std::allocator<int> >({1,2,3,4})");
+		auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<wiertlo::RTTINamePolicy>>(std::vector<int>({ 1, 2, 3, 4 }));
+		testRawAny(actual, std::vector<std::string>{
+			"std::vector<int,std::allocator<int> >({1,2,3,4})",
+			"std::vector<int, std::allocator<int> >({1,2,3,4})"
+		});
+	}
+	{
+		auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<wiertlo::RTTINamePolicy>>(std::vector<std::vector<bool>>({ std::vector<bool>{ false, false, true }, std::vector<bool>{ true }}));
+		testRawAny(actual, std::vector<std::string>{
+			"std::vector<std::vector<bool,std::allocator<bool> >,std::allocator<std::vector<bool,std::allocator<bool> > > >({std::vector<bool,std::allocator<bool> >({false,false,true}),std::vector<bool,std::allocator<bool> >({true})})",
+			"std::vector<std::vector<bool, std::allocator<bool> >, std::allocator<std::vector<bool, std::allocator<bool> > > >({std::vector<bool, std::allocator<bool> >({false,false,true}),std::vector<bool, std::allocator<bool> >({true})})"
+		});
 	}
 }
