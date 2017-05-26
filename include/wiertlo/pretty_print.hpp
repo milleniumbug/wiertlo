@@ -6,6 +6,7 @@
 #include <climits>
 #include <initializer_list>
 #include <cstddef>
+#include <algorithm>
 
 namespace wiertlo
 {
@@ -364,14 +365,7 @@ namespace wiertlo
 				}
 			};
 
-			template<typename T>
-			std::string get_type_name()
-			{
-				// TODO: provide an actual type name
-				return "?!?!?!";
-			}
-
-			/*template<typename T, typename = void>
+			template<typename T, typename = void>
 			struct is_container
 			{
 				static const bool value = false;
@@ -379,20 +373,22 @@ namespace wiertlo
 
 			template<typename T>
 			struct is_container<T, void_t<
-				decltype(std::declval<T>.begin()),
-				decltype(std::declval<T>.end())>>
+				decltype(std::declval<T>().begin()),
+				decltype(std::declval<T>().end()),
+				decltype(std::declval<typename T::value_type>()),
+				decltype(T{ std::initializer_list<typename T::value_type>() })>>
 			{
 				static const bool value = true;
-			};*/
+			};
 		}
 
-		template<typename T = void, typename Enabler = void>
+		template<typename NameFromTypePolicy = void, typename T = void, typename Enabler = void>
 		struct cpp_expression_format
 		{
 			template<typename U>
 			struct rebind
 			{
-				typedef cpp_expression_format<U> type;
+				typedef cpp_expression_format<NameFromTypePolicy, U> type;
 			};
 		};
 
@@ -414,13 +410,13 @@ namespace wiertlo
 	}
 }
 
-// fundamental
+// scalar
 namespace wiertlo
 {
 	namespace pretty
 	{
-		template<>
-		struct cpp_expression_format<bool, void> : cpp_expression_format<>
+		template<typename NameFromTypePolicy>
+		struct cpp_expression_format<NameFromTypePolicy, bool, void> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, bool value)
 			{
@@ -428,8 +424,8 @@ namespace wiertlo
 			}
 		};
 
-		template<>
-		struct cpp_expression_format<char, void> : cpp_expression_format<>
+		template<typename NameFromTypePolicy>
+		struct cpp_expression_format<NameFromTypePolicy, char, void> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, char value)
 			{
@@ -437,8 +433,8 @@ namespace wiertlo
 			}
 		};
 
-		template<>
-		struct cpp_expression_format<std::nullptr_t, void> : cpp_expression_format<>
+		template<typename NameFromTypePolicy>
+		struct cpp_expression_format<NameFromTypePolicy, std::nullptr_t, void> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, std::nullptr_t)
 			{
@@ -446,8 +442,8 @@ namespace wiertlo
 			}
 		};
 
-		template<typename Numeric>
-		struct cpp_expression_format<Numeric, detail::void_t<typename detail::safe_limits<Numeric>::type>> : cpp_expression_format<>
+		template<typename NameFromTypePolicy, typename Numeric>
+		struct cpp_expression_format<NameFromTypePolicy, Numeric, detail::void_t<typename detail::safe_limits<Numeric>::type>> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, Numeric value)
 			{
@@ -467,6 +463,18 @@ namespace wiertlo
 				}
 			}
 		};
+
+		template<typename NameFromTypePolicy, typename Enum>
+		struct cpp_expression_format<NameFromTypePolicy, Enum, typename std::enable_if<std::is_enum<Enum>::value>::type> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, Enum value)
+			{
+				auto underlying = typename std::underlying_type<Enum>::type(value);
+				os << NameFromTypePolicy::template get_name<Enum>() << "(";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, underlying);
+				os << ")";
+			}
+		};
 	}
 }
 
@@ -476,13 +484,13 @@ namespace wiertlo
 {
 	namespace pretty
 	{
-		template<typename T>
-		struct cpp_expression_format<std::unique_ptr<T>, void> : cpp_expression_format<>
+		template<typename NameFromTypePolicy, typename T>
+		struct cpp_expression_format<NameFromTypePolicy, std::unique_ptr<T>, void> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, const std::unique_ptr<T>& value)
 			{
-				os << "::std::make_unique<" << detail::get_type_name<T>() << ">(";
-				wiertlo::pretty::print<cpp_expression_format<>>(os, *value);
+				os << "std::make_unique<" << NameFromTypePolicy::template get_name<T>() << ">(";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, *value);
 				os << ")";
 			}
 		};
@@ -495,30 +503,37 @@ namespace wiertlo
 {
 	namespace pretty
 	{
-		template<>
-		struct cpp_expression_format<std::string, void> : cpp_expression_format<>
+		template<typename NameFromTypePolicy>
+		struct cpp_expression_format<NameFromTypePolicy, std::string, void> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, const std::string& value)
 			{
-				os << "::std::string(\"" << detail::c_string_literal_without_quotes_from_string(value.data(), value.size()) << "\")";
+				os << "std::string(\"" << detail::c_string_literal_without_quotes_from_string(value.data(), value.size()) << "\")";
 			}
 		};
 
-		/*template<typename Container>
+		template<typename NameFromTypePolicy, typename Container>
 		struct cpp_expression_format<
+			NameFromTypePolicy,
 			Container,
 			detail::void_t<typename std::enable_if<detail::is_container<Container>::value>::type>
-		> : cpp_expression_format<>
+		> : cpp_expression_format<NameFromTypePolicy>
 		{
 			static void print(std::ostream& os, const Container& value)
 			{
-				os << detail::get_type_name<Container>() << "({";
+				os << NameFromTypePolicy::template get_name<Container>() << "({";
+				bool first = true;
 				for(auto& x : value)
 				{
-					wiertlo::pretty::print<cpp_expression_format<>>(os, x);
+					if(!first)
+					{
+						os << ",";
+					}
+					wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, x);
+					first = false;
 				}
 				os << "})";
 			}
-		};*/
+		};
 	}
 }
