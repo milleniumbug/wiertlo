@@ -382,6 +382,16 @@ namespace wiertlo
 			};
 		}
 
+		// This format serializes the object into a form compilable with a C++ compiler
+		// Following assumptions are made:
+		// (target compiler = the compiler which compiles the serialized form,
+		//  source compiler = the compiler which compiled the executable which runs the pretty printer)
+		// - target compiler uses C++14
+		// - the resolved typedef names will match the source compiler
+		// (which means `std::size_t(0)` can be serialized into `0u`, `0ul` or `0ull`,
+		// depending on your source compiler)
+		// - serialized form for a given type can use all the functions/classes which are
+		// introduced by the header which defines that type
 		template<typename NameFromTypePolicy = void, typename T = void, typename Enabler = void>
 		struct cpp_expression_format
 		{

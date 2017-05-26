@@ -11,6 +11,7 @@ Header description
 - `<wiertlo/comp_from_key.hpp>` - Make a compare function from a key function.
 - `<wiertlo/construct.hpp>` - less error-prone in-place construction.
 - `<wiertlo/defs.hpp>` - C++ template typedefs for built-in types.
+- `<wiertlo/demangled.hpp>` - Demangle names relatively portably.
 - `<wiertlo/deleter_from_function.hpp>` - simplify wrapping legacy C API with `std::unique_ptr`.
 - `<wiertlo/enum.hpp>` - improved enums. You need to include `<wiertlo/enum_enable.hpp>` beforehand
 - `<wiertlo/interval.hpp>` - verify if a variable is in a given interval. Support for half-open and closed intervals.
@@ -21,6 +22,7 @@ Header description
 - `<wiertlo/noisy.hpp>` - log all calls to Big Five.
 - `<wiertlo/one_based_array.hpp>` - array decorator to make them one-based.
 - `<wiertlo/overload_set.hpp>` - (C++14) pass entire overload sets into standard algorithms.
+- `<wiertlo/pretty_print.hpp>` - (C++14) pretty print C++ objects in multiple formats: currently only "C++ expression" format is supported
 - `<wiertlo/pimpl_handle.hpp>` - generic class for PIMPL idiom
 - `<wiertlo/shared_member.hpp>` - share ownership of a subobject with the enclosing object.
 - `<wiertlo/shitty_range.hpp>` - World's Simplest Range Library™.
