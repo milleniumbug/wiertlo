@@ -5,6 +5,7 @@
 #include <limits>
 #include <climits>
 #include <initializer_list>
+#include <cstddef>
 
 namespace wiertlo
 {
@@ -413,7 +414,7 @@ namespace wiertlo
 	}
 }
 
-// scalar
+// fundamental
 namespace wiertlo
 {
 	namespace pretty
@@ -433,6 +434,15 @@ namespace wiertlo
 			static void print(std::ostream& os, char value)
 			{
 				os << "'" << detail::c_string_literal_without_quotes_from_string(&value, 1) << "'";
+			}
+		};
+
+		template<>
+		struct cpp_expression_format<std::nullptr_t, void> : cpp_expression_format<>
+		{
+			static void print(std::ostream& os, std::nullptr_t)
+			{
+				os << "nullptr";
 			}
 		};
 
