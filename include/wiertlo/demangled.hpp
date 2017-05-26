@@ -9,7 +9,7 @@ namespace wiertlo
 {
 	namespace detail
 	{
-		void replaceAll(std::string& source, const std::string& from, const std::string& to)
+		inline void replaceAll(std::string& source, const std::string& from, const std::string& to)
 		{
 			std::string newString;
 			newString.reserve(source.length());  // avoids a few memory allocations
