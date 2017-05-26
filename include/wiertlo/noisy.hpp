@@ -3,23 +3,64 @@
 
 #include <typeinfo>
 #include <iostream>
+#include <utility>
 
 namespace wiertlo
 {
+    namespace detail {
+        struct default_logger {
+            template <typename STR>
+            void operator()(STR&& str) {
+                std::cout << std::forward<STR>(str);
+            }
+        };
+    }
+    
 	/// noisy
 	///
 	/// A class logs all of the calls to Big Five and the default constructor
 	/// The name of the template parameter, received as if by call
 	/// to `typeid(T).name()`, is displayed in the logs.
-	template<typename T>
-	struct noisy
+	template<typename T, typename LOG = detail::default_logger>
+	struct noisy : private LOG
 	{
-		noisy& operator=(noisy&&) noexcept { std::cout << "operator=(noisy<" << typeid(T).name() << ">&&)\n"; return *this; }
-		noisy& operator=(const noisy&) { std::cout << "operator=(const noisy<" << typeid(T).name() << ">&)\n"; return *this; }
-		noisy(const noisy&) { std::cout << "noisy(const noisy<" << typeid(T).name() << ">&)\n"; }
-		noisy(noisy&&) noexcept { std::cout << "noisy(noisy<" << typeid(T).name() << ">&&)\n"; }
-		~noisy() { std::cout << "~noisy<" << typeid(T).name() << ">()\n"; }
-		noisy() { std::cout << "noisy<" << typeid(T).name() << ">()\n"; }
+		noisy& operator=(noisy&&) noexcept {
+		    LOG::operator()("operator=(noisy<");
+		    LOG::operator()(typeid(T).name());
+		    LOG::operator()(">&&)\n");
+		    return *this; 
+		}
+		
+		noisy& operator=(const noisy&) {
+		    LOG::operator()("operator=(const noisy<"); 
+		    LOG::operator()(typeid(T).name());
+		    LOG::operator()(">&)\n"); 
+		    return *this; 
+		}
+		
+		noisy(const noisy&) {
+		    LOG::operator()("noisy(const noisy<");
+		    LOG::operator()(typeid(T).name());
+		    LOG::operator()(">&)\n"); 
+		}
+		
+		noisy(noisy&&) noexcept {
+		    LOG::operator()("noisy(noisy<");
+		    LOG::operator()(typeid(T).name());
+		    LOG::operator()(">&&)\n");
+		}
+		
+		~noisy() {
+		    LOG::operator()("~noisy<");
+		    LOG::operator()(typeid(T).name());
+		    LOG::operator()(">()\n");
+		}
+		
+		noisy() {
+		    LOG::operator()("noisy<");
+		    LOG::operator()(typeid(T).name());
+		    LOG::operator()(">()\n"); 
+		}
 	};
 }
 
