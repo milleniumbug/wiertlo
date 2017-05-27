@@ -7,6 +7,8 @@
 #include <initializer_list>
 #include <cstddef>
 #include <algorithm>
+#include <cmath>
+#include <cassert>
 
 namespace wiertlo
 {
@@ -365,6 +367,39 @@ namespace wiertlo
 				}
 			};
 
+			template<typename T>
+			struct fp_suffix
+			{
+
+			};
+
+			template<>
+			struct fp_suffix<float>
+			{
+				static const char* suffix()
+				{
+					return "f";
+				}
+			};
+
+			template<>
+			struct fp_suffix<double>
+			{
+				static const char* suffix()
+				{
+					return "";
+				}
+			};
+
+			template<>
+			struct fp_suffix<long double>
+			{
+				static const char* suffix()
+				{
+					return "l";
+				}
+			};
+
 			template<typename T, typename = void>
 			struct is_container
 			{
@@ -484,7 +519,25 @@ namespace wiertlo
 			{
 				typedef detail::safe_limits<FloatingPoint> limits;
 				std::ostream withManipulatorsRemoved(os.rdbuf());
-				
+				auto res = std::fpclassify(value);
+				if(res == FP_NORMAL || res == FP_SUBNORMAL)
+				{
+					withManipulatorsRemoved.precision(std::numeric_limits<FloatingPoint>::max_digits10+2);
+					withManipulatorsRemoved.setf(std::ios_base::scientific, std::ios_base::floatfield);
+					withManipulatorsRemoved << value << detail::fp_suffix<FloatingPoint>::suffix();
+				}
+				else if(res == FP_ZERO)
+				{
+					withManipulatorsRemoved << (std::signbit(value) ? "-" : "") << "0.0" << detail::fp_suffix<FloatingPoint>::suffix();
+				}
+				else if(res == FP_INFINITE)
+				{
+					withManipulatorsRemoved << (std::signbit(value) ? "-" : "") << "std::numeric_limits<" << NameFromTypePolicy::template get_name<FloatingPoint>() << ">::infinity()";
+				}
+				else if(res == FP_NAN)
+				{
+					withManipulatorsRemoved << (std::signbit(value) ? "-" : "") << "std::numeric_limits<" << NameFromTypePolicy::template get_name<FloatingPoint>() << ">::quiet_NaN()";
+				}
 			}
 		};
 
@@ -762,6 +815,49 @@ namespace wiertlo
 				os << NameFromTypePolicy::template get_name<T>();
 				os << ">(";
 				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, value.load());
+				os << ")";
+			}
+		};
+	}
+}
+
+// complex
+#include <complex>
+namespace wiertlo
+{
+	namespace pretty
+	{
+		namespace detail
+		{
+			template<typename Tuple>
+			struct enable_if_complex
+			{
+
+			};
+
+			template<typename T>
+			struct enable_if_complex<std::complex<T>>
+			{
+				typedef T type;
+			};
+		}
+
+		template<typename NameFromTypePolicy, typename Complex>
+		struct cpp_expression_format<
+			NameFromTypePolicy,
+			Complex,
+			detail::void_t<typename detail::enable_if_complex<Complex>::type>
+		> : cpp_expression_format<NameFromTypePolicy>
+		{
+			static void print(std::ostream& os, const Complex& value)
+			{
+				typedef typename detail::enable_if_complex<Complex>::type T;
+				os << "std::complex<";
+				os << NameFromTypePolicy::template get_name<T>();
+				os << ">(";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, value.real());
+				os << ",";
+				wiertlo::pretty::print<cpp_expression_format<NameFromTypePolicy>>(os, value.imag());
 				os << ")";
 			}
 		};

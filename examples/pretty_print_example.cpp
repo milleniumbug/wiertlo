@@ -86,4 +86,33 @@ int main()
 	test(std::make_tuple(42,std::string("lol")), "std::make_tuple(42,std::string(\"lol\"))");
 	test(std::bitset<6>("010011"), "std::bitset<6>(\"010011\")");
 	test(std::atomic<int>(5), "std::atomic<int>(5)");
+	{
+		auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<wiertlo::RTTINamePolicy>>(5.0);
+		testRawAny(actual, std::vector<std::string>{
+			"5.0000000000000000000e+00",
+			"5.0000000000000000000e+000"
+		});
+	}
+	test(0.0, "0.0");
+	test(-0.0, "-0.0");
+	{
+		auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<wiertlo::RTTINamePolicy>>(-45.0f);
+		testRawAny(actual, std::vector<std::string>{
+			"-4.50000000000e+01f",
+			"-4.50000000000e+001f"
+		});
+	}
+	{
+		auto actual = wiertlo::pretty::sprint<wiertlo::pretty::cpp_expression_format<wiertlo::RTTINamePolicy>>(6.0l);
+		testRawAny(actual, std::vector<std::string>{
+			"6.0000000000000000000e+00l",
+			"6.00000000000000000000000e+000l"
+		});
+	}
+	test(std::numeric_limits<float>::quiet_NaN(), "std::numeric_limits<float>::quiet_NaN()");
+	test(std::numeric_limits<double>::infinity(), "std::numeric_limits<double>::infinity()");
+	test(-std::numeric_limits<double>::infinity(), "-std::numeric_limits<double>::infinity()");
+	test(std::complex<float>(0, 0), "std::complex<float>(0.0f,0.0f)");
+	test(std::complex<double>(0, 0), "std::complex<double>(0.0,0.0)");
+	test(std::complex<long double>(0, 0), "std::complex<long double>(0.0l,0.0l)");
 }
