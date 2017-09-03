@@ -14,12 +14,12 @@ namespace wiertlo
 	template<typename T>
 	struct noisy
 	{
-		noisy& operator=(noisy&&) noexcept { std::cout << "operator=(noisy<" << typeid(T).name() << ">&&)\n"; return *this; }
-		noisy& operator=(const noisy&) { std::cout << "operator=(const noisy<" << typeid(T).name() << ">&)\n"; return *this; }
-		noisy(const noisy&) { std::cout << "noisy(const noisy<" << typeid(T).name() << ">&)\n"; }
-		noisy(noisy&&) noexcept { std::cout << "noisy(noisy<" << typeid(T).name() << ">&&)\n"; }
-		~noisy() { std::cout << "~noisy<" << typeid(T).name() << ">()\n"; }
-		noisy() { std::cout << "noisy<" << typeid(T).name() << ">()\n"; }
+		noisy& operator=(noisy&& other) noexcept { std::cout << "MOVE ASSIGNMENT<" << typeid(T).name() << ">(this = " << this << ", other = " << &other << ")\n"; return *this; }
+		noisy& operator=(const noisy& other) { std::cout << "COPY ASSIGNMENT<" << typeid(T).name() << ">(this = " << this << ", other = " << &other << ")\n"; return *this; }
+		noisy(const noisy& other) { std::cout << "COPY CONSTRUCTOR<" << typeid(T).name() << ">(this = " << this << ", other = " << &other << ")\n"; }
+		noisy(noisy&& other) noexcept { std::cout << "MOVE CONSTRUCTOR<" << typeid(T).name() << ">(this = " << this << ", other = " << &other << ")\n"; }
+		~noisy() { std::cout << "DESTRUCTOR<" << typeid(T).name() << ">(this = " << this << ")\n"; }
+		noisy() { std::cout << "CONSTRUCTOR<" << typeid(T).name() << ">(this = " << this << ")\n"; }
 	};
 }
 
