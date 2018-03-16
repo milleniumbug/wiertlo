@@ -1,5 +1,7 @@
 #include <iostream>
+#include <string>
 #include "pimpl_handle_example.hpp"
+#include "wiertlo/pimpl_handle.hpp"
 
 int main()
 {

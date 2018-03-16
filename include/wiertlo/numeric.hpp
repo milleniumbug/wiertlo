@@ -3,6 +3,7 @@
 
 #include <limits>
 #include <type_traits>
+#include <array>
 
 namespace wiertlo
 {
@@ -120,6 +121,21 @@ namespace wiertlo
 	int integral_compare(Integral1 lhs, Integral2 rhs)
 	{
 		return detail::integral_compare(lhs, rhs);
+	}
+
+	template<typename InputNumber, typename InputContainer>
+	std::array<InputNumber, std::tuple_size<InputContainer>::value+1> decompose(
+		const InputContainer& components,
+		InputNumber number)
+	{
+		std::array<InputNumber, std::tuple_size<InputContainer>::value+1> decomposed;
+		for(std::size_t i = 0; i < components.size(); ++i)
+		{
+			decomposed[i] = number % components[i];
+			number /= components[i];
+		}
+		decomposed.back() = number;
+		return decomposed;
 	}
 
 	template<typename Integral>
