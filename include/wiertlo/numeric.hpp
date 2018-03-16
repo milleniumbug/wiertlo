@@ -62,7 +62,7 @@ namespace wiertlo
 		>::type* = nullptr>
 		int integral_compare(Integral1 lhs, Integral2 rhs)
 		{
-			// the rhs is signed so it will never be >= 0
+			// the rhs is unsigned so it will always be >= 0
 			if(lhs < 0)
 				return -1;
 			const auto ulhs = static_cast<typename std::make_unsigned<Integral1>::type>(lhs);
