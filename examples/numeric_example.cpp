@@ -3,7 +3,7 @@
 #include <cassert>
 #include <limits>
 
-int main()
+void numeric()
 {
 	assert(wiertlo::integral_compare(static_cast<unsigned>(0), static_cast<unsigned>(0)) == 0);
 	assert(wiertlo::integral_compare(static_cast<unsigned>(5), static_cast<unsigned>(5)) == 0);
@@ -56,4 +56,27 @@ int main()
 	assert(wiertlo::wrap(5, 360) == 5);
 	assert(wiertlo::wrap(365, 360) == 5);
 	assert(wiertlo::wrap(725, 360) == 5);
+
+	assert(wiertlo::float_less<>()(4.0, 5.0));
+	assert(!wiertlo::float_less<>()(5.0, 5.0));
+	assert(!wiertlo::float_less<>()(6.0, 5.0));
+	assert(wiertlo::float_less<>()(6.0, std::numeric_limits<double>::quiet_NaN()));
+	assert(!wiertlo::float_less<>()(std::numeric_limits<double>::quiet_NaN(), 6.0));
+	assert(!wiertlo::float_less<>()(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()));
+
+	assert(wiertlo::float_less<double>()(4.0, 5.0));
+	assert(!wiertlo::float_less<double>()(5.0, 5.0));
+	assert(!wiertlo::float_less<double>()(6.0, 5.0));
+	assert(wiertlo::float_less<double>()(6.0, std::numeric_limits<double>::quiet_NaN()));
+	assert(wiertlo::float_less<double>()(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()));
+	assert(wiertlo::float_less<double>()(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN()));
+	assert(!wiertlo::float_less<double>()(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity()));
+	assert(!wiertlo::float_less<double>()(std::numeric_limits<double>::quiet_NaN(), -std::numeric_limits<double>::infinity()));
+	assert(!wiertlo::float_less<double>()(std::numeric_limits<double>::quiet_NaN(), 6.0));
+	assert(!wiertlo::float_less<double>()(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()));
+}
+
+int main()
+{
+    numeric();
 }

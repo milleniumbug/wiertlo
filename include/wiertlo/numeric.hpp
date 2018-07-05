@@ -4,6 +4,7 @@
 #include <limits>
 #include <type_traits>
 #include <array>
+#include <cmath>
 
 namespace wiertlo
 {
@@ -144,6 +145,44 @@ namespace wiertlo
 		// thanks https://stackoverflow.com/a/44184152/1012936
 		return ((x % wrapValue) + wrapValue) % wrapValue;
 	}
+
+	// provides a strict weak order for floating point values
+	// even for when one of the values is a NaN
+	// NaNs are considered to be bigger than any other value
+	template<typename T = void, typename = void>
+	struct float_less;
+
+	template<>
+	struct float_less<void>
+	{
+		typedef std::true_type is_transparent;
+
+		template<typename Float1, typename Float2>
+		bool operator()(Float1 a, Float2 b) const
+		{
+			static_assert(
+				std::is_floating_point<Float1>::value &&
+				std::is_floating_point<Float2>::value,
+				"must be a floating point type");
+			if(std::isnan(a))
+				return false;
+			if(std::isnan(b))
+				return true;
+			return a < b;
+		}
+	};
+	
+	template<typename T>
+	struct float_less<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+	{
+		static_assert(std::is_floating_point<T>::value, "must be a floating point type");
+
+		bool operator()(T a, T b) const
+		{
+			float_less<void> comp;
+			return comp(a, b);
+		}
+	};
 }
 
 #endif

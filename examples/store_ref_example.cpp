@@ -2,7 +2,7 @@
 // also the feature is in the name - it's for making it clear that you're storing a non-owning reference
 // to the object
 
-#include <wiertlo/store_ref.hpp>
+#include <wiertlo/experimental/store_ref.hpp>
 
 struct wow {};
 struct stuff { wow* p; };
