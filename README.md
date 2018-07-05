@@ -35,7 +35,21 @@ Header description
 - `<wiertlo/value_ptr.hpp>` - copyable smart pointer with value semantics.
 - `<wiertlo/void.hpp>` - workarounds for `void` being a special snowflake.
 
-**NOTICE:** the headers not listed in the above list are considered non-public and/or beta. They may even not compile. They may be also subject to changes. They may be removed at any time. You have been warned.
+Compatibility policy
+--------------------
+
+- Headers in the above list are supposed to be stable.
+- Headers in `<wiertlo/experimental/*>` are experimental with no stability guarantees whatsoever. They may be subject to changes. They may be removed in the future. They may not compile. 
+
+For the stable headers:
+
+- Names declared in the `wiertlo::detail` namespace are exempt from stability guarantees.
+- Macros starting with `WIERTLO_DETAIL` are exempt from stability guarantees.
+- New classes, new free functions may be added to existing headers.
+- New macros starting out with `WIERTLO_` may be added to existing headers.
+- New function overloads that differ in arity may be added, even to functions that currently have only one overload (that is to say, don't take addresses of them)
+- Types that satisfy `std::is_trivially_*` or `std::is_standard_layout` currently may not satisfy them in the future, unless the header contains an explicit `static_assert` on that property for that type.
+- ...more to come...
 
 Design rationale
 ----------------
